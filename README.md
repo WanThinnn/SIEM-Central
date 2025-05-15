@@ -3,10 +3,10 @@
 
 **Dự án này đang được tiến hành, nội dung bên dưới chỉ là bản tóm tắt về dự án, không phải là phiên bản chính thức.**
 
-# **Description**
+# **Mô Tả**
 Triển khai một giải pháp Security Information and Event Management (SIEM) sử dụng Elastic Stack (ELK) để thu thập, xử lý, phân tích và trực quan hóa các sự kiện an ninh mạng trong một môi trường mô phỏng. Dự án tập trung vào việc giám sát log từ các hệ thống Windows, Linux và các thiết bị an ninh như Suricata và pfSense để phát hiện, điều tra và phản ứng với các mối đe dọa.
 
-# **Technologies**
+# **Công Nghệ Sử Dụng**
 *   **Elastic Stack (ELK):** Bao gồm Elasticsearch (lưu trữ, tìm kiếm, phân tích phân tán), Logstash (thu thập, xử lý dữ liệu pipeline), Kibana (trực quan hóa, phân tích, giao diện SIEM) và Beats (Elastic Agent/Filebeat) (thu thập dữ liệu nhẹ).
 *   **Network/Security Devices:** pfSense (router, firewall, log forwarding), Suricata (Inline IDS/IPS, rule-based detection).
 *   **Log Sources:** Windows Event Logs (Security, System, Application), Linux System Logs (syslog, auth.log, kern.log), Web Server Logs (Nginx access/error logs).
@@ -14,7 +14,7 @@ Triển khai một giải pháp Security Information and Event Management (SIEM)
 *   **Query Languages:** Elasticsearch Query DSL, Kibana Query Language (KQL).
 *   **Frameworks:** MITRE ATT&CK Framework (mapping detection rules).
 
-# **Responsibilities**
+# **Nhiệm Vụ**
 *   Thiết kế và triển khai kiến trúc tổng quan của hệ thống SIEM dựa trên Elastic Stack, bao gồm việc triển khai các thành phần chính (Elasticsearch, Logstash, Kibana) và các agent thu thập dữ liệu (Filebeat, Elastic Agent).
 *   Cấu hình các nguồn dữ liệu (Windows, Linux, Suricata, pfSense) để thu thập và gửi log về SIEM bằng Filebeat.
 *   Thiết lập pfSense làm router và firewall trung tâm, cấu hình rule định tuyến, NAT và chuyển tiếp log hệ thống.
