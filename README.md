@@ -1,4 +1,4 @@
-# SIEM-Central
+# Research and Implementation of a Centralized Management and Processing System for Cyber Attack Events 
 ![Alt text](deployment-architecture.png)
 
 **Dự án này đang được tiến hành, nội dung bên dưới chỉ là bản tóm tắt về dự án, không phải là phiên bản chính thức.**
