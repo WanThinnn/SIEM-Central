@@ -1,7 +1,7 @@
 # Research and Implementation of a Centralized Management and Processing System for Cyber Attack Events 
 ![Alt text](deployment-architecture.png)
 
-**Dự án này đang được tiến hành, nội dung bên dưới chỉ là bản tóm tắt về dự án, không phải là phiên bản chính thức.**
+**Dự án này vẫn đang được tiến hành, nội dung bên dưới chỉ là bản tóm tắt về dự án, không phải là phiên bản chính thức.**
 
 # **Mô Tả**
 Triển khai một giải pháp Security Information and Event Management (SIEM) sử dụng Elastic Stack (ELK) để thu thập, xử lý, phân tích và trực quan hóa các sự kiện an ninh mạng trong một môi trường mô phỏng. Dự án tập trung vào việc giám sát log từ các hệ thống Windows, Linux và các thiết bị an ninh như Suricata và pfSense để phát hiện, điều tra và phản ứng với các mối đe dọa.
@@ -32,7 +32,7 @@ Triển khai một giải pháp Security Information and Event Management (SIEM)
 
 ---
 
-**This project is in progress, the content below is just an overview of the project, not the official version**
+**This project is still in progress, the content below is just an overview of the project, not the official version**
 
 # **Description**
 Deployed a Security Information and Event Management (SIEM) solution leveraging the Elastic Stack (ELK) to collect, process, analyze, and visualize cybersecurity events within a simulated environment. The project focused on monitoring logs from Windows and Linux systems, along with security devices like Suricata and pfSense, to detect, investigate, and respond to threats.
