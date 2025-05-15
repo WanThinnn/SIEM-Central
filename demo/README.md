@@ -1,1 +1,1 @@
-Video demo: <comming soon>
+Video demo: coming soon
