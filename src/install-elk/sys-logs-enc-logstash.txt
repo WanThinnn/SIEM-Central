@@ -1,0 +1,55 @@
+input {
+  beats {
+    port => 5044
+  }
+}
+
+filter {
+  mutate {
+    add_field => {
+      "log_type" => "encrypted"
+      "raw_message" => "%{message}"
+    }
+  }
+  json {
+    source => "message"
+  }
+  ruby {
+    code => "
+      require 'openssl'
+      key = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'.b  # Key cần khớp với key mã hoá
+      n = event.get('nonce')
+      c = event.get('ciphertext')
+      if n and c
+        nonce = [n].pack('H*')
+        ciphertext = [c].pack('H*')
+        cipher = OpenSSL::Cipher.new('aes-256-gcm')
+        cipher.decrypt
+        cipher.key = key
+        cipher.iv = nonce
+        begin
+          decrypted_text = cipher.update(ciphertext) + cipher.final
+          event.set('decrypted_message', decrypted_text)
+        rescue Exception => e
+          event.tag('_decrypt_failed')
+          event.set('decryption_error', e.message)
+          # Nếu giải mã thất bại (key sai), lưu log gốc vào trường encrypted_message
+          event.set('encrypted_message', event.get('raw_message'))
+        end
+      end
+    "
+  }
+}
+
+output {
+  elasticsearch {
+    index => "system_logs"
+    hosts => ["192.168.71.128:9200"]
+    user => "elastic"
+    password => "p6mZPYjvHPnzUDds4MCf"
+    ssl => true
+    ssl_certificate_verification => false
+  }
+  # Thêm output debug
+  stdout { codec => rubydebug }
+}

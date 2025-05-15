@@ -1,0 +1,66 @@
+1. Tổng quan về Elastic Stack (ELK)
+* ELK là bộ công cụ mã nguồn mở gồm Elasticsearch, Logstash, Kibana (và Beats), dùng để thu thập, lưu trữ, tìm kiếm, phân tích và trực quan hóa dữ liệu thời gian thực.
+* Ứng dụng chính:
+    * Giám sát log hệ thống, ứng dụng.
+    * Tìm kiếm và phân tích dữ liệu lớn.
+    * Phân tích dữ liệu thời gian thực.
+    * Bảo mật và phát hiện mối đe dọa.
+
+2. Kiến trúc tổng quan
+* Luồng dữ liệu: Beats/Data Sources → Logstash → Elasticsearch → Kibana.
+    * Beats (Filebeat, Metricbeat,...): Thu thập dữ liệu từ nguồn (log, metric) và gửi đến Logstash hoặc Elasticsearch.
+    * Logstash: Xử lý dữ liệu (lọc, chuyển đổi) qua pipeline gồm Input → Filter → Output.
+    * Elasticsearch: Lưu trữ dữ liệu dạng JSON, phân tán qua cluster, hỗ trợ tìm kiếm nhanh.
+    * Kibana: Trực quan hóa dữ liệu qua dashboard, biểu đồ, báo cáo.
+
+3. Elasticsearch – Lý thuyết và cơ chế
+3.1. Kiến trúc phân tán
+* Cluster: Tập hợp các node (máy chủ) hoạt động cùng nhau.
+    * Node types:
+        * Master Node: Quản lý cluster (tạo/xóa index, phân bổ shard).
+        * Data Node: Lưu trữ dữ liệu và xử lý truy vấn.
+        * Coordinating Node: Điều phối yêu cầu từ client.
+        * Ingest Node: Xử lý dữ liệu trước khi lưu trữ.
+* Sharding & Replication:
+    * Shard: Phân mảnh dữ liệu (Primary/Replica Shard) để tăng hiệu suất.
+    * Replica: Bản sao dữ liệu để đảm bảo tính sẵn sàng cao.
+3.2. Lưu trữ dữ liệu
+* Index: Nhóm dữ liệu (tương tự database).
+* Document: Đơn vị dữ liệu cơ bản (dạng JSON).
+* Mapping: Định nghĩa cấu trúc dữ liệu (kiểu trường, cách xử lý).
+3.3. Tìm kiếm và phân tích
+* Query DSL: Ngôn ngữ truy vấn JSON (ví dụ: match, term, bool, aggregations).
+* Analyzers: Xử lý văn bản trước khi lập chỉ mục (gồm Character Filters, Tokenizer, Token Filters).
+
+4. Logstash – Xử lý dữ liệu
+* Pipeline: Input → Filter → Output.
+    * Input: Nhận dữ liệu từ Beats, file, syslog, Kafka,...
+    * Filter: Xử lý dữ liệu (dùng plugin như grok, mutate, date, geoip).
+    * Output: Gửi dữ liệu đến Elasticsearch, file, Kafka,...
+
+5. Kibana – Trực quan hóa
+* Index Patterns: Xác định dữ liệu từ Elasticsearch để phân tích.
+* Visualizations: Tạo biểu đồ (bar, line, pie, heatmap,...).
+* Dashboards: Tổng hợp visualizations để giám sát dữ liệu.
+* KQL (Kibana Query Language): Truy vấn dữ liệu trực quan.
+
+6. Beats – Thu thập dữ liệu
+* Các loại Beats: Filebeat (log), Metricbeat (metric), Winlogbeat (Windows log), Packetbeat (mạng).
+* Ưu điểm: Nhẹ, dễ triển khai, tích hợp trực tiếp với Elasticsearch/Logstash.
+
+7. Bảo mật trong Elastic Stack
+* Xác thực: LDAP, Active Directory, SAML.
+* Mã hóa: SSL/TLS cho dữ liệu truyền tải và lưu trữ.
+* Phân quyền (RBAC): Kiểm soát truy cập dựa trên vai trò.
+
+8. Ứng dụng và so sánh
+* Ưu điểm ELK:
+    * Kiến trúc phân tán, mở rộng dễ dàng.
+    * Khả năng tìm kiếm và phân tích mạnh mẽ.
+    * Trực quan hóa linh hoạt với Kibana.
+* Nhược điểm:
+    * Cấu hình phức tạp, yêu cầu tài nguyên cao.
+    * Hạn chế hỗ trợ ABAC (Attribute-Based Access Control).
+
+Kết luận
+Elastic Stack là giải pháp toàn diện cho quản lý dữ liệu lớn, từ thu thập, xử lý đến trực quan hóa. Tuy nhiên, việc triển khai cần cân nhắc yêu cầu về tài nguyên và độ phức tạp trong cấu hình.

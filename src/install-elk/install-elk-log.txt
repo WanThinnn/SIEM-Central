@@ -1,0 +1,54 @@
+
+### OLD
+Elasticsearch:
+   Tài khoản: elastic
+   Mật khẩu: _K0mCKP=_7Y7y=TU4gTI
+
+Kibana:
+   Token: eyJ2ZXIiOiI4LjE0LjAiLCJhZHIiOlsiMTkyLjE2OC43MS4xMjg6OTIwMCJdLCJmZ3IiOiI5MzQxMWQ5YjQzYmQ2YjFmNzZiYTM2NjlmZWQ4YWUyNDg5ZTFiZmVhMjEwZGY5MzIyYmRiY2NkODRlMjQzMDU2Iiwia2V5Ijoia0JTQWhKVUJUMjEyb29TdXRfbmc6UFpxT2d3bTRUTVNxTExkX182LWRSdyJ9
+
+Mã xác minh Kibana:
+Your verification code is:  155 299
+
+###NEW!
+
+wanthinnn@ubuntu-1:~$ sudo ./fix.sh
+Please confirm that you would like to continue [y/N]Thông tin đăng nhập:
+-------------------
+Elasticsearch:
+   Tài khoản: elastic
+   Mật khẩu: LZI0n6Y8HfBx0l25ZSS+
+
+Kibana:
+   Token: eyJ2ZXIiOiI4LjE0LjAiLCJhZHIiOlsiMTkyLjE2OC43MS4xMjg6OTIwMCJdLCJmZ3IiOiI5MzQxMWQ5YjQzYmQ2YjFmNzZiYTM2NjlmZWQ4YWUyNDg5ZTFiZmVhMjEwZGY5MzIyYmRiY2NkODRlMjQzMDU2Iiwia2V5IjoicGZkUUs1WUJnZWtPanhDSnBTOEs6VlU5UmtqY0VST3FxOWRLX3ZlTWRpUSJ9
+
+Mã xác minh Kibana:
+Couldn't find verification code.
+
+If Kibana hasn't been configured yet, restart Kibana to generate a new code.
+
+Otherwise, you can safely ignore this message and start using Kibana.
+
+
+root@ubuntu-1:~# curl -X POST "https://192.168.71.128:9200/_security/service/elastic/kibana/credential/token" -u elastic:LZI0n6Y8HfBx0l25ZSS+ -k -H "Content-Type: application/json"
+{"created":true,"token":{"name":"token_sPd3K5YBgekOjxCJ6S8z","value":"AAEAAWVsYXN0aWMva2liYW5hL3Rva2VuX3NQZDNLNVlCZ2VrT2p4Q0o2Uzh6Ok1ZTVQxLWtPUzBPSmloVnJGeVJZMkE"}}root@ubuntu-1:~# nano /etc/kibana/kibana.yml
+
+
+
+wanthinnn@ubuntu-1:~$ curl -X POST "https://192.168.71.128:9200/_security/api_key" -H "Content-Type: application/json" -u elastic:LZI0n6Y8HfBx0l25ZSS+ -k -d'
+{
+  "name": "kibana_key",
+  "role_descriptors": {
+    "kibana_system_role": {
+      "cluster": ["all"],
+      "indices": [
+        {
+          "names": ["*"],
+          "privileges": ["all"]
+        }
+      ]
+    }
+  },
+  "expiration": "365d"
+}'
+{"id":"6Y5-K5YBuESjhc16x8GD","name":"kibana_key","expiration":1776022451087,"api_key":"hZaMnbfzS_O0PeIpEkODOg","encoded":"Nlk1LUs1WUJ1RVNqaGMxNng4R0Q6aFphTW5iZnpTX08wUGVJcEVrT0RPZw=="}wanthinnn@ubuntu-1:~$ sudo

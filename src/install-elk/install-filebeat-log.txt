@@ -1,0 +1,90 @@
+wanthinnn@ubuntu-2:~/elk$ sudo ./install-filebeat.sh
+Hit:1 http://vn.archive.ubuntu.com/ubuntu jammy InRelease
+Get:2 http://vn.archive.ubuntu.com/ubuntu jammy-updates InRelease [128 kB]
+Get:3 http://vn.archive.ubuntu.com/ubuntu jammy-backports InRelease [127 kB]
+Get:4 http://vn.archive.ubuntu.com/ubuntu jammy-updates/main i386 Packages [760 kB]
+Get:5 http://security.ubuntu.com/ubuntu jammy-security InRelease [129 kB]
+Get:6 http://vn.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages [2.352 kB]
+Get:7 http://vn.archive.ubuntu.com/ubuntu jammy-updates/main Translation-en [392 kB]
+Get:8 http://vn.archive.ubuntu.com/ubuntu jammy-updates/main amd64 DEP-11 Metadata [103 kB]
+Get:9 http://vn.archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 Packages [3.008 kB]
+Get:10 http://vn.archive.ubuntu.com/ubuntu jammy-updates/restricted Translation-en [528 kB]
+Get:11 http://vn.archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 DEP-11 Metadata [212 B]
+Get:12 http://vn.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages [1.192 kB]
+Get:13 http://vn.archive.ubuntu.com/ubuntu jammy-updates/universe i386 Packages [759 kB]
+Get:14 http://vn.archive.ubuntu.com/ubuntu jammy-updates/universe Translation-en [293 kB]
+Get:15 http://vn.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 DEP-11 Metadata [359 kB]
+Get:16 http://vn.archive.ubuntu.com/ubuntu jammy-updates/multiverse amd64 DEP-11 Metadata [940 B]
+Get:17 http://vn.archive.ubuntu.com/ubuntu jammy-backports/main amd64 DEP-11 Metadata [7.020 B]
+Get:18 http://vn.archive.ubuntu.com/ubuntu jammy-backports/restricted amd64 DEP-11 Metadata [212 B]
+Get:19 http://vn.archive.ubuntu.com/ubuntu jammy-backports/universe amd64 DEP-11 Metadata [17,8 kB]
+Get:20 http://vn.archive.ubuntu.com/ubuntu jammy-backports/multiverse amd64 DEP-11 Metadata [212 B]
+Get:21 http://security.ubuntu.com/ubuntu jammy-security/main i386 Packages [593 kB]
+Get:22 http://security.ubuntu.com/ubuntu jammy-security/main amd64 Packages [2.110 kB]
+Get:23 http://security.ubuntu.com/ubuntu jammy-security/main Translation-en [329 kB]
+Get:24 http://security.ubuntu.com/ubuntu jammy-security/main amd64 DEP-11 Metadata [43,1 kB]
+Get:25 http://security.ubuntu.com/ubuntu jammy-security/restricted amd64 Packages [2.899 kB]
+Get:26 http://security.ubuntu.com/ubuntu jammy-security/restricted Translation-en [509 kB]
+Get:27 http://security.ubuntu.com/ubuntu jammy-security/restricted amd64 DEP-11 Metadata [208 B]
+Get:28 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 Packages [965 kB]
+Get:29 http://security.ubuntu.com/ubuntu jammy-security/universe i386 Packages [652 kB]
+Get:30 http://security.ubuntu.com/ubuntu jammy-security/universe Translation-en [207 kB]
+Get:31 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 DEP-11 Metadata [125 kB]
+Get:32 http://security.ubuntu.com/ubuntu jammy-security/multiverse amd64 DEP-11 Metadata [208 B]
+Fetched 18,6 MB in 6s (3.077 kB/s)
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+13 packages can be upgraded. Run 'apt list --upgradable' to see them.
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+wget is already the newest version (1.21.2-2ubuntu1.1).
+wget set to manually installed.
+The following NEW packages will be installed:
+  apt-transport-https
+0 upgraded, 1 newly installed, 0 to remove and 13 not upgraded.
+Need to get 1.510 B of archives.
+After this operation, 170 kB of additional disk space will be used.
+Get:1 http://vn.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 apt-transport-https all 2.4.13 [1.510 B]
+Fetched 1.510 B in 0s (9.360 B/s)
+Selecting previously unselected package apt-transport-https.
+(Reading database ... 183090 files and directories currently installed.)
+Preparing to unpack .../apt-transport-https_2.4.13_all.deb ...
+Unpacking apt-transport-https (2.4.13) ...
+Setting up apt-transport-https (2.4.13) ...
+Warning: apt-key is deprecated. Manage keyring files in trusted.gpg.d instead (see apt-key(8)).
+OK
+deb https://artifacts.elastic.co/packages/8.x/apt stable main
+Hit:1 http://vn.archive.ubuntu.com/ubuntu jammy InRelease
+Hit:2 http://vn.archive.ubuntu.com/ubuntu jammy-updates InRelease
+Hit:3 http://vn.archive.ubuntu.com/ubuntu jammy-backports InRelease
+Get:4 https://artifacts.elastic.co/packages/8.x/apt stable InRelease [3.248 B]
+Get:5 https://artifacts.elastic.co/packages/8.x/apt stable/main i386 Packages [3.396 B]
+Hit:6 http://security.ubuntu.com/ubuntu jammy-security InRelease
+Get:7 https://artifacts.elastic.co/packages/8.x/apt stable/main amd64 Packages [66,3 kB]
+Fetched 73,0 kB in 1s (94,7 kB/s)
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+13 packages can be upgraded. Run 'apt list --upgradable' to see them.
+W: https://artifacts.elastic.co/packages/8.x/apt/dists/stable/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.
+Waiting for cache lock: Could not get lock /var/lib/dpkg/lock-frontend. It is held by process 4532 (apt-get)
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following NEW packages will be installed:
+  filebeat
+0 upgraded, 1 newly installed, 0 to remove and 13 not upgraded.
+Need to get 56,0 MB of archives.
+After this operation, 206 MB of additional disk space will be used.
+Get:1 https://artifacts.elastic.co/packages/8.x/apt stable/main amd64 filebeat amd64 8.17.2 [56,0 MB]
+Fetched 56,0 MB in 2s (29,4 MB/s)
+Selecting previously unselected package filebeat.
+(Reading database ... 183094 files and directories currently installed.)
+Preparing to unpack .../filebeat_8.17.2_amd64.deb ...
+Unpacking filebeat (8.17.2) ...
+Setting up filebeat (8.17.2) ...
+Synchronizing state of filebeat.service with SysV service script with /lib/systemd/systemd-sysv-install.
+Executing: /lib/systemd/systemd-sysv-install enable filebeat
+Created symlink /etc/systemd/system/multi-user.target.wants/filebeat.service → /lib/systemd/system/filebeat.service.
