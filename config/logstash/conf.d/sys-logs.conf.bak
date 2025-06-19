@@ -1,0 +1,113 @@
+input {
+  beats {
+    port => 5045
+    ssl => false
+    host => "0.0.0.0"
+    #ssl_certificate => "/etc/logstash/certs/logstash.crt"  # Đường dẫn đến chứng chỉ Logstash
+    #ssl_key => "/etc/logstash/certs/logstash.key"  # Đường dẫn đến khóa riêng Logstash
+    #ssl_certificate_authorities => ["/etc/logstash/certs/rootCA.crt"]  # Chứng chỉ gốc (root CA)
+    #ssl_verify_mode => "force_peer"  # Bắt buộc xác thực chứng chỉ client (Filebeat)
+  }
+}
+filter {
+  if [agent][type] == "winlogbeat" {
+    if [winlog][channel] == "Security" {
+      prune {
+        whitelist_names => [
+          "^@timestamp$",
+          "^winlog\.event_id$",
+          "^winlog\.event_data\.SubjectLogonId$",
+          "^winlog\.provider_guid$",
+          "^winlog\.provider_name$",
+          "^host\.name$",
+          "^host\.hostname$",
+          "^host\.ip$",
+          "^winlog\.event_data\.SubjectUserName$",
+          "^event\.code$",
+          "^winlog\.event_data\.TargetUserName$",
+          "^winlog\.keywords$",
+          "^event\.outcome$",
+          "^event\.action$",
+          "^message$"
+        ]
+      }
+    } else {
+      # Có thể drop nếu không cần thiết
+      # drop { }
+    }
+  }
+  else if [agent][type] == "filebeat" {
+    # Nhánh xử lý cho Suricata logs (Filebeat):
+    if [log][file][path] =~ /suricata/ {
+      # Bước 1: Parse JSON từ message thành các trường ở root event
+      json {
+        source => "message"
+        #remove_field => ["message"]
+      }
+
+      # Bước 2: Xử lý timestamp
+      date {
+        match => ["timestamp", "ISO8601"]
+        target => "@timestamp"
+      }
+
+      # Bước 3: Kiểm tra event_type và thêm thông tin nếu là alert
+      if [event_type] == "alert" {
+        mutate {
+          add_field => {
+            "[@metadata][index_suffix]" => "suricata"
+            "alert_signature" => "%{[alert][signature]}"
+          }
+        }
+      }
+
+      # Bước 4: Prune sau khi JSON filter đã chạy, với whitelist các trường đã parse
+      prune {
+        whitelist_names => [
+          "timestamp", "event_type", "src_ip", "dest_ip", "signature",
+          "proto", "alert", "community_id", "flow_id"
+        ]
+      }
+    }
+    else {
+      # Nếu filebeat có nguồn khác, bạn có thể xử lý theo cách khác hoặc áp dụng prune nhẹ
+      prune {
+        whitelist_names => [ "timestamp", "host", "log", "message" ]
+      }
+    }
+  }
+  else if [log][file][path] =~ /(\/var\/log\/auth.log|\/var\/log\/secure)/ {
+
+    prune {
+      whitelist_names => [
+        "^@timestamp$",
+        "^syslog_timestamp$",
+        "^host$",
+        "^program$",
+        "^log_message$",
+        "^message$"
+      ]
+    }
+
+  }
+}
+
+
+
+output {
+  elasticsearch {
+    index => "system_logs"
+    hosts => ["https://localhost:9200"]
+    user => "wanthinnn"
+    password => "Thienlai0941841870@#$"
+    ssl => true
+    ssl_certificate_verification => false
+  }
+  # Thêm output debug
+  stdout { codec => rubydebug }
+}
+
+
+
+
+

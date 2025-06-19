@@ -1,0 +1,136 @@
+input {
+  beats {
+    port => 5045
+    ssl => false
+    host => "0.0.0.0"
+  }
+}
+
+filter {
+  ################################
+  # Log Suricata (eve.json)
+  ################################
+  # if [log][file][path] =~ "suricata/eve.json" {
+  #   # Gắn nhãn nguồn log
+  #   mutate { add_field => { "log_source" => "suricata" } }
+  #   # Parse JSON nội dung log
+  #   json { source => "message" }
+  #   # Chỉ giữ sự kiện có event_type = alert hoặc drop
+  #   if [event_type] != "alert" and [event_type] != "drop" {
+  #     drop { }
+  #   }
+  #   # Đưa các trường trong [alert] lên cấp trên
+  #   mutate {
+  #     add_field => { "signature_id"     => "%{[alert][signature_id]}" }
+  #     add_field => { "alert_signature"  => "%{[alert][signature]}" }
+  #     add_field => { "alert_action"     => "%{[alert][action]}" }
+  #   }
+  #   # Xóa các trường không cần thiết
+  #   mutate { remove_field => [ "alert", "message" ] }
+  # }
+
+  ################################
+  # Log Nginx - access.log
+  ################################
+  if [log][file][path] =~ "nginx/access.log" {
+    mutate { add_field => { "log_source" => "nginx_access" } }
+    # Grok parse theo định dạng access log: client_ip, method, request, response_code, bytes, referrer, agent
+    grok {
+      match => {
+        "message" => [
+          # 1) Chuẩn HTTP request
+          "%{IPORHOST:client_ip} %{DATA:ident} %{DATA:auth} \[%{HTTPDATE:timestamp}\] \"%{WORD:method} %{DATA:request} HTTP/%{NUMBER:httpversion}\" %{INT:response_code} %{INT:bytes} \"%{DATA:referrer}\" \"%{DATA:agent}\"",
+          # 2) Fallback: bất kỳ chuỗi trong dấu "..."
+          "%{IPORHOST:client_ip} %{DATA:ident} %{DATA:auth} \[%{HTTPDATE:timestamp}\] \"%{DATA:raw_request}\" %{INT:response_code} %{INT:bytes} \"%{DATA:referrer}\" \"%{DATA:agent}\""
+        ]
+       }
+    }
+    # Nếu chỉ có raw_request, gán thành method cho dễ xài
+    if [raw_request] and ![method] {
+      mutate {
+       add_field => { "method" => "%{raw_request}" }
+        remove_field => [ "raw_request" ]
+        }
+      }
+    # Loại bỏ các trường phụ và message gốc
+    mutate { remove_field => [ "ident", "auth", "message" ] }
+  }
+
+  ################################
+  # Log Nginx - error.log
+  ################################
+  else if [log][file][path] =~ "nginx/error.log" {
+    mutate { add_field => { "log_source" => "nginx_error" } }
+    # Grok parse error log: host, program và thông điệp lỗi
+    grok {
+      match => { "message" => "%{DATA:host} %{DATA:error_program}: %{GREEDYDATA:error_message}" }
+    }
+    mutate { remove_field => [ "message" ] }
+  }
+
+  ################################
+  # Log Hệ thống (auth.log, syslog, messages)
+  ################################
+  else if [log][file][path] =~ "(auth\\.log|syslog|messages)" {
+    mutate { add_field => { "log_source" => "system" } }
+    # Grok parse Syslog tiêu chuẩn: host, chương trình, thông điệp
+    grok {
+      match => { "message" => "%{SYSLOGHOST:syslog_host} %{SYSLOGPROG:sys_program}: %{GREEDYDATA:sys_message}" }
+    }
+    mutate { remove_field => [ "message" ] }
+  }
+
+  ################################
+  # Windows Security Logs
+  ################################
+  else if [log][file][path] =~ "Security" {
+    mutate { add_field => { "log_source" => "windows_security" } }
+    # Không cần parse thêm; giữ các trường cơ bản như winlog.event_id, event_data.SubjectUserName, event.action, message
+  }
+
+  ################################
+  # Các log khác
+  ################################
+  else {
+    mutate { add_field => { "log_source" => "other" } }
+    # Không parse thêm; sẽ giữ lại timestamp và message gốc
+  }
+  mutate {
+    remove_field => ["host", "agent", "ecs", "input", "log", "fileset"]
+  }
+
+  ################################
+  # Prune filter: chỉ giữ các trường cần thiết
+  ################################
+  prune {
+    whitelist_names => [
+      "@timestamp", "log_source",
+      # Trường Suricata
+      # "event_type", "src_ip", "dest_ip", "proto", "flow_id",
+      # "signature_id", "alert_signature", "alert_action", "community_id",
+      # Trường Nginx access
+      "client_ip", "method", "request", "response_code", "bytes", "referrer", "agent",
+      # Trường Nginx error
+      "host", "error_program", "error_message",
+      # Trường hệ thống
+      "syslog_host", "sys_program", "sys_message",
+      # Trường Windows
+      "host.name", "winlog.event_id", "winlog.event_data.SubjectUserName", "event.action",
+      # Luôn giữ message để hiển thị (nếu cần)
+      "message"
+    ]
+  }
+}
+
+output {
+  elasticsearch {
+    index => "system_logs-%{+YYYY.MM.dd}"
+    hosts => ["https://localhost:9200"]
+    user => "wanthinnn"
+    password => "Thienlai0941841870@#$"
+    ssl => true
+    ssl_certificate_verification => false
+  }
+  # Thêm output debug
+  stdout { codec => rubydebug }
+}
