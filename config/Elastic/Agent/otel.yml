@@ -1,0 +1,39 @@
+receivers:
+  filelog:
+    include: [ /var/log/system.log ]
+    start_at: beginning
+    storage: file_storage/filelogreceiver
+
+processors:
+  resource:
+    attributes:
+    - key: service.name
+      action: insert
+      value: elastic-otel-test
+
+exporters:
+  debug:
+    verbosity: detailed
+    sampling_initial: 10000
+    sampling_thereafter: 10000
+
+extensions:
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 700
+    spike_limit_mib: 180
+  health_check:
+    endpoint: "localhost:13133"
+    path: "/health/status"
+  file_storage/filelogreceiver:
+    create_directory: true
+    directory: ${env:STATE_PATH}
+
+service:
+  extensions: [health_check, memory_limiter, file_storage/filelogreceiver]
+  pipelines:
+    logs:
+      receivers: [filelog]
+      processors: [resource]
+      exporters:
+        - debug
