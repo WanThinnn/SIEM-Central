@@ -52,6 +52,13 @@ Key objectives:
    - Kibana dashboards display security metrics (login trends, IDS alerts, WAF blocks).
    - Watchers and alerts notify via email/Slack on critical events.
 
+## 2.3. Glossary & Definitions
+- ECS: Elastic Common Schema
+- KQL: Kibana Query Language
+- ILM: Index Lifecycle Management
+- Fleet: Elastic Agent manager
+- Integration: Plugin defines input/filter/output for Agent
+
 
 ## 2.3. Core Technologies
 
