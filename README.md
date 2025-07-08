@@ -66,6 +66,7 @@ Key objectives:
 - **Intrusion Detection & Analysis**:
   - Suricata (inline IDS/IPS)
   - Zeek (network traffic analysis)
+  - PfSense (Firewall)
 - **Web Application Firewall**: ModSecurity with OWASP Core Rule Set
 - **Reverse Proxy & Security**: Nginx for HTTPS termination and access control
 - **Detection & Analytics**:
